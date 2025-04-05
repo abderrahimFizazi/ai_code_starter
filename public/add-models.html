@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add/Configure Models - AI Web Weaver</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 20px auto; border: 1px solid #ccc; border-radius: 8px; }
+        h1 { color: #333; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        h2 { color: #555; margin-top: 30px; }
+        p, li { color: #444; }
+        code { background-color: #f0f0f0; padding: 2px 5px; border-radius: 4px; font-family: monospace; }
+        .note { background-color: #fffbe6; border-left: 4px solid #ffc107; padding: 10px 15px; margin: 20px 0; }
+        .config-path { font-weight: bold; color: #e83e8c; }
+        a { color: #4a90e2; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Adding & Configuring AI Providers/Models</h1>
+
+    <p>Welcome! This page provides guidance on how to add support for more AI models and providers in the AI Web Weaver application.</p>
+
+    <div class="note">
+        <strong>Important:</strong> Adding new providers or making new models available requires changes to the application's **backend** configuration and potentially the backend code itself. Changes are not made directly through this user interface.
+    </div>
+
+    <h2>How Models Appear in the UI</h2>
+    <p>The list of available providers (like "Gemini", "OpenAI") and their corresponding models in the dropdown menus is loaded directly from the backend.</p>
+    <p>Specifically, the frontend requests a configuration file from the server endpoint <code>/api/models</code>. This endpoint serves the content of the <span class="config-path">constants/models.json</span> file located on the server.</p>
+
+    <h2>Adding/Modifying Models (Backend Steps)</h2>
+    <p>To add or change the available models:</p>
+    <ol>
+        <li>
+            <strong>Edit the Configuration File:</strong>
+            <ul>
+                <li>Access the server where the AI Web Weaver backend is running.</li>
+                <li>Locate the <span class="config-path">constants/models.json</span> file.</li>
+                <li>
+                    Edit this JSON file to add or modify entries. The structure is:
+                    <pre><code>{
+  "ProviderName": [
+    { "value": "model-api-id-1", "label": "User Friendly Name 1" },
+    { "value": "model-api-id-2", "label": "User Friendly Name 2", "selected": true }
+  ],
+  "AnotherProvider": [
+    { "value": "other-model", "label": "Other Model Name" }
+  ]
+  // ... more providers
+}</code></pre>
+                    Replace <code>"ProviderName"</code> with the exact identifier the backend uses (e.g., "gemini", "openai", "deepseek").
+                    Replace <code>"model-api-id-..."</code> with the specific ID the provider's API expects.
+                    Replace <code>"User Friendly Name ..."</code> with the text you want to display in the dropdown.
+                    Optionally, add <code>"selected": true</code> to one model per provider to make it the default selection in the UI.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <strong>Ensure Backend Support (Crucial):</strong>
+            <ul>
+                <li>Simply adding an entry to <span class="config-path">models.json</span> is **not enough**.</li>
+                <li>The **backend server code** (<code>server.js</code> in this case) must be updated to actually handle requests for the new provider and model.</li>
+                <li>This involves:
+                    <ul>
+                        <li>Recognizing the new provider name in the <code>/generate</code> endpoint request.</li>
+                        <li>Initializing the necessary API client/SDK for the new provider (often requiring an API key).</li>
+                        <li>Calling the new provider's API with the correct model ID and prompt.</li>
+                        <li>Handling the provider's specific response format and converting it to the required { html, css, js } structure.</li>
+                        <li>Managing API keys and authentication securely (usually via environment variables like <code>NEW_PROVIDER_API_KEY</code> loaded using <code>dotenv</code>).</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+         <li>
+            <strong>Restart the Backend Server:</strong> After modifying <span class="config-path">models.json</span> and potentially the server code, you usually need to restart the backend server process for the changes to take effect.
+        </li>
+    </ol>
+    <p>Once the backend is correctly configured and restarted, refreshing the AI Web Weaver application page should show the updated provider and model lists.</p>
+
+    <h2>Configuration (API Keys)</h2>
+    <p>Backend implementations typically load provider configurations (like API keys) from environment variables (e.g., <code>GEMINI_API_KEY</code>, <code>OPENAI_API_KEY</code>, <code>DEEPSEEK_API_KEY</code>) using a library like <code>dotenv</code> (reading from a <code>.env</code> file). Refer to the specific backend setup instructions for details on where to place API keys securely.</p>
+
+    <hr>
+    <p><a href="index.html">« Back to AI Web Weaver</a></p>
+
+</body>
+</html>

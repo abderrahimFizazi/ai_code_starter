@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Starter AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/brands.min.css" integrity="sha512-8RxmFOVaKQeCk7pressMCcv0dUuTBdHIBeCgcRJakBHgNpYssmbGyZffYGOKE8ByTJPDdodoL5BvZGWW+RvSvQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="app-container chatgpt-layout">
+        <div class="initial-layout-wrapper">
+            <div class="initial-content">
+                <div class="logo">
+                    <h1><i class="fas fa-code"></i> Code Starter</h1>
+                </div>
+                <p class="initial-description">Describe the website or component you want to create.</p>
+            </div>
+        </div>
+
+        <header class="app-header">
+            <div class="logo">
+                <h1><i class="fas fa-code"></i> Code Starter</h1>
+            </div>
+            <div class="header-links">
+                <a href="https://github.com/abderrahimFizazi/ai_code_starter" target="_blank" rel="noopener noreferrer" class="icon-button" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+        </header>
+
+        <div class="main-view-area">
+            <div id="loading" class="hidden" aria-label="Loading content"></div>
+            <div id="error-message" class="hidden error" aria-live="assertive"></div>
+            <div class="main-content" aria-busy="false">
+                <div class="editor-pane" id="editor-split-pane">
+                    <div class="file-tabs" id="file-tabs-container">
+                        <button class="file-tab-button active" data-target-editor="html-code">index.html</button>
+                        <button class="file-tab-button" data-target-editor="css-code">style.css</button>
+                        <button class="file-tab-button" data-target-editor="js-code">script.js</button>
+                        <button class="file-tab-button" data-target-editor="readme-content">README.md</button>
+                    </div>
+                    <div class="code-editors">
+                        <div class="code-editor-wrapper active" data-editor-id="html-code">
+                            <label for="html-code">index.html</label>
+                            <textarea id="html-code" class="code-input html-editor" spellcheck="false" placeholder="Generated HTML..."></textarea>
+                        </div>
+                        <div class="code-editor-wrapper" data-editor-id="css-code">
+                            <label for="css-code">style.css</label>
+                            <textarea id="css-code" class="code-input css-editor" spellcheck="false" placeholder="Generated CSS..."></textarea>
+                        </div>
+                        <div class="code-editor-wrapper" data-editor-id="js-code">
+                            <label for="js-code">script.js</label>
+                            <textarea id="js-code" class="code-input js-editor" spellcheck="false" placeholder="Generated JS..."></textarea>
+                        </div>
+                        <div class="code-editor-wrapper" data-editor-id="readme-content">
+                            <label for="readme-content">README.md</label>
+                            <textarea id="readme-content" class="code-input readme-editor" spellcheck="false" placeholder="Project README..."></textarea>
+                        </div>
+                    </div>
+                    <div class="download-actions">
+                        <div class="download-button-group">
+                            <button id="download-html-button" class="download-button" title="Download HTML"><i class="fas fa-file-code"></i> HTML</button>
+                            <button id="download-css-button" class="download-button" title="Download CSS"><i class="fab fa-css3-alt"></i> CSS</button>
+                            <button id="download-js-button" class="download-button" title="Download JS"><i class="fab fa-js-square"></i> JS</button>
+                            <button id="download-readme-button" class="download-button" title="Download README"><i class="fas fa-file-alt"></i> README</button>
+                            <button id="download-zip-button" class="download-button zip-button" title="Download ZIP"><i class="fas fa-file-archive"></i> ZIP</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="preview-pane" id="preview-split-pane">
+                    <div class="preview-header">
+                        <h2>Live Preview</h2>
+                        <button id="fullscreen-preview-button" class="icon-button" title="Toggle Fullscreen">
+                            <i class="fas fa-expand icon-expand"></i>
+                            <i class="fas fa-compress icon-collapse hidden"></i>
+                        </button>
+                    </div>
+                    <div class="preview-container">
+                        <iframe id="preview-frame" title="Website Preview" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="generation-config input-controls-row">
+                <div class="config-group provider-selector">
+                    <label for="provider-select">Provider</label>
+                    <div class="select-wrapper">
+                        <select id="provider-select">
+                            <option value="">Loading...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="config-group model-selector">
+                    <label for="model-select">Model</label>
+                    <div class="select-wrapper">
+                        <select id="model-select" disabled>
+                            <option value="">Select Provider</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="config-group add-models-button-container">
+                    <a href="add-models.html" id="add-models-button" class="icon-button add-models-button" title="Add/configure models" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-plus"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="prompt-input-container">
+                <textarea id="prompt-input" rows="3" placeholder="Describe what you want to build or modify..."></textarea>
+                <button id="generate-button" class="input-action-button submit-button" title="Send prompt (Enter)">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+            </div>
+        </div>
+
+        <footer class="footer-note-bottom">
+            <span class="footer-text">Code Starter AI may produce inaccurate information.</span>
+            <span class="footer-separator">|</span>
+            <span class="footer-links">
+                <a href="https://github.com/abderrahimFizazi" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/abderrahimfazazi/" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://abdofizaz.tech" target="_blank" rel="noopener noreferrer" title="Portfolio / Website"><i class="fas fa-globe"></i></a>
+                <a href="https://medium.com/@abderrahimfazazi" target="_blank" rel="noopener noreferrer" title="Portfolio / Website"><i class="fab fa-medium"></i></a>
+
+            </span>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/split.js@1.6.5/dist/split.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1285 @@
+/* public/style.css - Code Starter AI */
+
+/* --- Base & Typography --- */
+:root {
+    --primary-color: #4a90e2;
+    --primary-darker: #357abd;
+    --secondary-color: #50e3c2;
+    --secondary-darker: #38a89d;
+    --text-color: #374151;
+    --light-text-color: #6b7280;
+    --header-bg: #ffffff;
+    /* Header background */
+    --header-border: #e5e7eb;
+    --header-text: #1f2937;
+    /* Darker text for header */
+    --border-color: #e5e7eb;
+    --input-border-color: #d1d5db;
+    --input-focus-border-color: var(--primary-color);
+    /* --- Enhanced focus shadow --- */
+    --input-focus-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+    --light-bg: #f9fafb;
+    --lighter-bg: #ffffff;
+    --input-area-bg: #ffffff;
+    --code-bg: #282c34;
+    --code-text: #abb2bf;
+    --error-bg: #fef2f2;
+    --error-text: #dc2626;
+    --error-border: #fecaca;
+    --spinner-color: var(--primary-color);
+    --border-radius: 8px;
+    /* --- Slightly softer shadow --- */
+    --box-shadow: 0 4px 12px -2px rgb(0 0 0 / 0.08), 0 2px 8px -3px rgb(0 0 0 / 0.06);
+    --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* ... (keep existing base styles, body, etc.) ... */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    background-color: var(--light-bg);
+    color: var(--text-color);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body.fullscreen-preview-active {
+    overflow: hidden;
+}
+
+body.loading-active>*:not(#loading):not(.initial-layout-wrapper) {
+    /* Avoid blur on initial wrapper */
+    /* filter: blur(1px); */
+}
+
+/* --- Main Layout (DEFAULT / ACTIVE STATE) --- */
+.app-container.chatgpt-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: var(--light-bg);
+    position: relative;
+    justify-content: flex-start;
+    align-items: stretch;
+    /* --- Add transition for background --- */
+    transition: background-color 0.5s ease;
+}
+
+/* ... (keep existing App Header, Main View Area styles) ... */
+/* --- App Header (ACTIVE STATE) --- */
+.app-header {
+    display: none;
+    /* Hidden by default, shown when initial-state removed */
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--header-border);
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    opacity: 0;
+    visibility: hidden;
+    order: 1;
+    /* Active state order */
+    transition: opacity 0.4s ease 0.1s, visibility 0.4s ease 0.1s;
+}
+
+.app-container:not(.initial-state) .app-header {
+    display: flex;
+    /* Show when not initial */
+    opacity: 1;
+    visibility: visible;
+}
+
+.app-header .logo h1 {
+    margin: 0;
+    font-size: 1.25em;
+    font-weight: 600;
+    color: var(--header-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.app-header .logo i {
+    color: var(--primary-color);
+    font-size: 1.1em;
+}
+
+.app-header .header-links {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.app-header .header-links .icon-button {
+    padding: 4px;
+}
+
+.app-header .header-links .icon-button i {
+    font-size: 1.1em;
+}
+
+
+/* --- Initial Content Wrapper (Initial State) --- */
+.initial-layout-wrapper {
+    display: none;
+    /* Hidden by default */
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    flex-grow: 1;
+    /* Allow wrapper to take space for centering */
+    justify-content: center;
+    /* Center children vertically */
+    padding: 20px;
+    /* Padding around content */
+    box-sizing: border-box;
+    order: 1;
+    /* Position in initial state flow */
+    opacity: 0;
+    /* Start hidden for animation */
+    /* --- Use the smoother fadeIn animation --- */
+    animation: fadeInContainer 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    /* Apply transition for potential future changes */
+    transition: opacity 0.5s ease;
+}
+
+/* --- Initial Content Area (Logo/Title) --- */
+.initial-content {
+    display: flex;
+    /* Changed back to flex */
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    /* Removed flex-grow and justify-content */
+    /* --- Increased bottom padding --- */
+    padding-bottom: 40px;
+    opacity: 0;
+    /* Start hidden for animation */
+    /* --- Smoother translateY --- */
+    transform: translateY(20px);
+    /* Start slightly down for animation */
+    /* Animation applied via initial-state class */
+}
+
+.initial-content .logo h1 {
+    margin: 0 0 15px 0;
+    /* Increased bottom margin */
+    /* --- Slightly larger logo --- */
+    font-size: 2.4em;
+    font-weight: 600;
+    color: var(--header-text);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    /* Increased gap */
+}
+
+.initial-content .logo i {
+    color: var(--primary-color);
+    font-size: 1em;
+}
+
+.initial-content .initial-description {
+    font-size: 1.1em;
+    /* Slightly larger */
+    color: var(--light-text-color);
+    margin: 0;
+    max-width: 85%;
+    /* Slightly narrower */
+    line-height: 1.6;
+    /* Improved line height */
+}
+
+/* --- Main View Area (ACTIVE STATE) --- */
+.main-view-area {
+    display: none;
+    /* Hidden initially */
+    flex-grow: 1;
+    overflow: hidden;
+    flex-direction: column;
+    position: relative;
+    padding: 0;
+    opacity: 0;
+    visibility: hidden;
+    order: 2;
+    /* Order below header in active state */
+    transition: opacity 0.4s ease 0.1s, visibility 0.4s ease 0.1s;
+}
+
+.app-container:not(.initial-state) .main-view-area {
+    display: flex;
+    /* Show when not initial */
+    opacity: 1;
+    visibility: visible;
+}
+
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    gap: 0;
+    border: none;
+    border-radius: 0;
+    overflow: hidden;
+    min-height: 300px;
+}
+
+
+/* ... (keep existing Loading/Error, Editor, Preview, etc. styles) ... */
+/* --- Loading / Error Indicators --- */
+#loading,
+#error-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 150;
+    width: 36px;
+    height: 36px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: var(--spinner-color);
+    border-radius: 50%;
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    padding: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+#loading {
+    animation: spin 1s linear infinite;
+}
+
+#error-message {
+    width: auto;
+    height: auto;
+    border: 1px solid var(--error-border);
+    padding: 15px 25px;
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 80%;
+    text-align: center;
+    font-size: 0.95em;
+    overflow-wrap: break-word;
+    font-weight: 600;
+    z-index: 100;
+}
+
+.app-container:not(.initial-state) #loading,
+.app-container:not(.initial-state) #error-message {
+    position: absolute;
+    /* Switch back when active */
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+.error {
+    /* Only bg/color */
+}
+
+.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* --- Editor & Preview Panes / Splitter / Tabs / Code / Download / Preview --- */
+.editor-pane,
+.preview-pane {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    background-color: var(--lighter-bg);
+}
+
+.preview-pane {
+    background-color: var(--light-bg);
+    padding: 0;
+    border-radius: 0;
+    border-left: 1px solid var(--border-color);
+}
+
+.editor-pane {
+    border-radius: 0;
+}
+
+.gutter {
+    background-color: #e5e7eb;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.gutter.gutter-horizontal {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeAAPRUQOGHsoZAAAAAElFTkSuQmCC');
+    cursor: col-resize;
+}
+
+.gutter:hover {
+    background-color: #d1d5db;
+}
+
+.file-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    background-color: #f3f4f6;
+    padding: 0 10px;
+    flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #f3f4f6;
+}
+
+.file-tabs::-webkit-scrollbar {
+    height: 6px;
+}
+
+.file-tabs::-webkit-scrollbar-track {
+    background: #f3f4f6;
+}
+
+.file-tabs::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+}
+
+.file-tabs::-webkit-scrollbar-thumb:hover {
+    background-color: #bbb;
+}
+
+.file-tab-button {
+    padding: 9px 14px;
+    cursor: pointer;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
+    font-size: 0.875em;
+    color: var(--light-text-color);
+    font-weight: 500;
+    margin-right: 1px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.file-tab-button:hover {
+    background-color: #e5e7eb;
+    color: var(--text-color);
+}
+
+.file-tab-button.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background-color: var(--code-bg);
+    color: #fff;
+    font-weight: 500;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    bottom: -1px;
+}
+
+.file-tab-button[data-target-editor="readme-content"].active {
+    background-color: var(--lighter-bg);
+    color: var(--primary-color);
+}
+
+.code-editors {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--code-bg);
+    border-radius: 0;
+}
+
+.code-editor-wrapper {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.code-editor-wrapper.active {
+    display: flex;
+}
+
+.code-editor-wrapper label {
+    display: none;
+}
+
+.code-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+    padding: 15px;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    line-height: 1.6;
+    box-sizing: border-box;
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    resize: none;
+    flex-grow: 1;
+    box-shadow: none;
+    caret-color: var(--code-text);
+    outline: none;
+    scrollbar-width: thin;
+    scrollbar-color: #555 var(--code-bg);
+}
+
+.code-input::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.code-input::-webkit-scrollbar-track {
+    background: var(--code-bg);
+}
+
+.code-input::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 4px;
+}
+
+.code-input::-webkit-scrollbar-thumb:hover {
+    background-color: #666;
+}
+
+.readme-editor {
+    background-color: var(--lighter-bg);
+    color: var(--text-color);
+    font-family: var(--font-sans);
+    font-size: 1em;
+    padding: 20px;
+    line-height: 1.7;
+    scrollbar-color: #ccc var(--lighter-bg);
+}
+
+.readme-editor::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+}
+
+.readme-editor::-webkit-scrollbar-thumb:hover {
+    background-color: #bbb;
+}
+
+.download-actions {
+    padding: 10px 15px;
+    border-top: 1px solid #4b5563;
+    background-color: #374151;
+    flex-shrink: 0;
+    border-radius: 0;
+}
+
+.download-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.download-button {
+    padding: 6px 12px;
+    border: 1px solid #6b7280;
+    background-color: #4b5563;
+    color: #d1d5db;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.8em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.download-button i {
+    font-size: 0.9em;
+    line-height: 1;
+    width: 1em;
+    text-align: center;
+}
+
+.download-button:hover {
+    background-color: #5a6474;
+    border-color: #9ca3af;
+    color: #fff;
+}
+
+.download-button.zip-button {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-darker);
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.download-button.zip-button:hover {
+    background-color: var(--secondary-darker);
+    border-color: var(--secondary-darker);
+}
+
+.download-button:disabled {
+    background-color: #4b5563;
+    border-color: #5a6474;
+    color: #6b7280;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--lighter-bg);
+    flex-shrink: 0;
+    border-radius: 0;
+}
+
+.preview-header h2 {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size: 1.1em;
+    color: #444;
+    font-weight: 500;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: var(--light-text-color);
+    border-radius: 4px;
+    line-height: 1;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.icon-button:hover {
+    background-color: #e9ecef;
+    color: var(--text-color);
+}
+
+.icon-button i {
+    font-size: 1em;
+    display: block;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+}
+
+.preview-container {
+    border: none;
+    flex-grow: 1;
+    min-height: 200px;
+    position: relative;
+    background-color: var(--lighter-bg);
+    border-radius: 0;
+    box-shadow: none;
+    overflow: auto;
+}
+
+#preview-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+/* --- Input Area (Both States) --- */
+.input-area {
+    background-color: var(--input-area-bg);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    flex-grow: 0;
+    /* Don't grow or shrink */
+    /* --- Consolidated transitions --- */
+    transition: width 0.4s ease, max-width 0.4s ease, margin-top 0.4s ease, border-radius 0.4s ease, box-shadow 0.4s ease, border 0.4s ease, padding 0.4s ease, opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Active State Specifics */
+.app-container:not(.initial-state) .input-area {
+    order: 3;
+    /* Below main view */
+    width: 100%;
+    max-width: none;
+    margin-top: 0;
+    padding: 10px 15px 5px 15px;
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+    max-height: 35vh;
+    opacity: 1;
+    transform: translateY(0); /* Ensure it's back to normal position */
+}
+
+.generation-config.input-controls-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+.input-controls-row .config-group {
+    margin-bottom: 2px;
+}
+
+.input-controls-row .config-group.provider-selector,
+.input-controls-row .config-group.model-selector {
+    flex: 1 1 160px;
+    min-width: 160px;
+}
+
+.input-controls-row .config-group label {
+    font-size: 0.8em;
+    margin-bottom: 3px;
+    color: var(--light-text-color);
+    display: block;
+}
+
+.input-controls-row .config-group select {
+    font-size: 0.9em;
+    padding: 6px 25px 6px 8px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--input-border-color);
+    border-radius: 6px;
+    background-color: var(--lighter-bg);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%23aaa%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.293%207.293a1%201%200%20011.414%200L10%2010.586l3.293-3.293a1%201%200%20111.414%201.414l-4%204a1%201%200%2001-1.414%200l-4-4a1%201%200%20010-1.414z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 1em;
+    min-height: 34px;
+    line-height: normal;
+    color: var(--text-color);
+}
+
+.input-controls-row .config-group select:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+.config-group.add-models-button-container {
+    flex-shrink: 0;
+    align-self: flex-end;
+    margin-left: 4px;
+    margin-bottom: 2px;
+}
+
+.icon-button.add-models-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--input-border-color);
+    background-color: var(--lighter-bg);
+    color: var(--light-text-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.icon-button.add-models-button:hover {
+    background-color: #f1f1f1;
+    border-color: #bbb;
+    color: var(--text-color);
+}
+
+.icon-button.add-models-button i {
+    font-size: 0.9em;
+    line-height: 1;
+}
+
+.prompt-input-container {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    /* --- Slightly softer border --- */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: var(--lighter-bg);
+    padding: 4px 6px 4px 12px;
+    /* --- Smoother transitions --- */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    /* --- Subtle base shadow --- */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.prompt-input-container:focus-within {
+    border-color: var(--input-focus-border-color);
+    /* --- Use enhanced focus shadow var --- */
+    box-shadow: var(--input-focus-shadow), 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+textarea#prompt-input {
+    flex-grow: 1;
+    padding: 8px 0;
+    border: none;
+    border-radius: 0;
+    box-sizing: border-box;
+    font-size: 0.95em;
+    resize: none;
+    min-height: 48px;
+    max-height: 20vh;
+    line-height: 1.5;
+    background-color: transparent;
+    box-shadow: none;
+    color: var(--text-color);
+    outline: none;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc var(--lighter-bg);
+}
+
+textarea#prompt-input::-webkit-scrollbar {
+    width: 6px;
+}
+
+textarea#prompt-input::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+textarea#prompt-input::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+}
+
+textarea#prompt-input::-webkit-scrollbar-thumb:hover {
+    background-color: #bbb;
+}
+
+textarea#prompt-input::placeholder {
+    color: #888; /* Slightly darker placeholder */
+}
+
+.submit-button {
+    flex-shrink: 0;
+    margin-left: 6px;
+    padding: 6px;
+    background-color: var(--text-color);
+    border: 1px solid var(--text-color); /* Ensure border matches */
+    color: white;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    box-shadow: none;
+    cursor: pointer;
+    /* --- Smooth transition --- */
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.submit-button:hover {
+    background-color: #4b5563;
+    border-color: #4b5563; /* Match border on hover */
+}
+
+.submit-button:disabled {
+    background-color: #ccc !important;
+    border-color: #ccc !important;
+    color: #888 !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+
+/* Footer Note (Both States) */
+.footer-note-bottom {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 5px 15px 10px 15px;
+    box-sizing: border-box;
+    color: #aaa; /* Slightly lighter default color */
+    font-size: 0.75em;
+    flex-shrink: 0;
+    order: 5;
+    /* Always last visually */
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    transition: color 0.3s ease, opacity 0.6s ease, transform 0.6s ease; /* Added transform */
+    opacity: 1;
+}
+
+.footer-note-bottom .footer-text {
+    vertical-align: middle;
+}
+
+.footer-note-bottom .footer-separator {
+    margin: 0 8px;
+    color: #ddd; /* Lighter separator */
+    vertical-align: middle;
+}
+
+.footer-note-bottom .footer-links {
+    display: inline-flex;
+    gap: 12px;
+    vertical-align: middle;
+}
+
+.footer-note-bottom .footer-links a {
+    color: #999; /* Slightly lighter link color */
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-note-bottom .footer-links a:hover {
+    color: var(--text-color);
+}
+
+.footer-note-bottom .footer-links i {
+    font-size: 1.1em;
+}
+
+/* ***************************************** */
+/* ******** INITIAL STATE STYLES ********* */
+/* ***************************************** */
+
+/* --- Refined Entrance Animation --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px); /* Start slightly lower */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInContainer {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.app-container.initial-state {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--light-bg);
+    padding: 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Show initial wrapper and apply refined fade */
+.app-container.initial-state .initial-layout-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 700px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    order: 1;
+    opacity: 0;
+    /* --- Smoother timing function --- */
+    animation: fadeInContainer 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    transition: opacity 0.5s ease; /* Add transition */
+}
+
+/* Show initial content block with smoother animation */
+.app-container.initial-state .initial-content {
+    display: flex;
+    opacity: 0;
+    transform: translateY(20px);
+    /* --- Smoother timing, slightly longer duration, delayed start --- */
+    animation: fadeInUp 0.8s 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Hide regular app header */
+.app-container.initial-state .app-header {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Hide main editor/preview */
+.app-container.initial-state .main-view-area {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    flex-grow: 0;
+}
+
+/* Style the input area within the wrapper (always visible) */
+.app-container.initial-state .input-area {
+    order: 2;
+    flex-shrink: 0;
+    flex-grow: 0;
+    border-top: none;
+    /* --- More pronounced shadow for focus --- */
+    box-shadow: 0 5px 20px -5px rgba(0, 0, 0, 0.12);
+    width: 90%; /* Make it wider relative to wrapper */
+    max-width: 650px; /* But cap its max width */
+    border-radius: 12px; /* Larger radius */
+    border: 1px solid var(--border-color);
+    margin-top: 0;
+    /* --- Increased padding --- */
+    padding: 8px 15px;
+    position: relative;
+    max-height: none;
+    opacity: 0;
+    transform: translateY(20px);
+    /* --- Staggered animation, smoother timing --- */
+    animation: fadeInUp 0.8s 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    /* Inherit smooth transitions from .input-area base */
+}
+
+/* Initial Textarea height */
+.app-container.initial-state textarea#prompt-input {
+    min-height: 60px;
+}
+
+/* Footer note position and animation in initial state */
+.app-container.initial-state .footer-note-bottom {
+    order: 3; /* Ensure footer is ordered after input area */
+    position: absolute;
+    bottom: 20px; /* Slightly more space from bottom */
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin-top: 0;
+    padding: 5px 15px;
+    opacity: 0;
+    transform: translateY(20px); /* Align animation start */
+    /* --- Later delay, smoother timing --- */
+    animation: fadeInUp 0.8s 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Center loading/error relative to viewport in initial state */
+.app-container.initial-state #loading,
+.app-container.initial-state #error-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* --- Fullscreen Preview Styles --- */
+/* ... (keep existing fullscreen styles) ... */
+body.fullscreen-preview-active #preview-split-pane {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1000 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background-color: var(--lighter-bg) !important;
+    flex-basis: auto !important;
+    border-left: none !important;
+}
+
+body.fullscreen-preview-active #preview-split-pane .preview-header {
+    flex-shrink: 0 !important;
+    border-radius: 0;
+    background-color: #f8f9fa;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+body.fullscreen-preview-active #preview-split-pane .preview-container {
+    flex-grow: 1 !important;
+    display: flex !important;
+    overflow: hidden !important;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+}
+
+body.fullscreen-preview-active #preview-split-pane #preview-frame {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    display: block !important;
+}
+
+body.fullscreen-preview-active>.app-container>*:not(.main-view-area),
+body.fullscreen-preview-active .initial-layout-wrapper,
+body.fullscreen-preview-active .app-header,
+body.fullscreen-preview-active .footer-note-bottom,
+body.fullscreen-preview-active .main-content>*:not(#preview-split-pane) {
+    display: none !important;
+}
+
+
+/* --- Responsive --- */
+/* ... (keep existing responsive styles, they should adapt reasonably well) ... */
+@media (max-width: 768px) {
+
+    /* DEFAULT/ACTIVE STATE */
+    .app-header .logo h1 {
+        font-size: 1.1em;
+        gap: 6px;
+    }
+
+    .input-area {
+        padding: 8px 12px 4px 12px;
+        max-height: 40vh;
+    }
+
+    .input-controls-row {
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+
+    .input-controls-row .config-group.provider-selector,
+    .input-controls-row .config-group.model-selector {
+        min-width: 140px;
+    }
+
+    .input-controls-row .config-group label {
+        font-size: 0.75em;
+    }
+
+    .input-controls-row .config-group select {
+        font-size: 0.85em;
+        min-height: 32px;
+    }
+
+    .config-group.add-models-button-container {
+        margin-left: auto;
+    }
+
+    .prompt-input-container {
+        padding: 3px 6px 3px 8px;
+    }
+
+    textarea#prompt-input {
+        font-size: 0.9em;
+        max-height: 25vh;
+        min-height: 40px;
+    }
+
+    .submit-button {
+        width: 30px;
+        height: 30px;
+        margin-left: 4px;
+    }
+
+    .submit-button i {
+        font-size: 0.9em;
+    }
+
+    .footer-note-bottom {
+        font-size: 0.7em;
+    }
+
+    .main-content {
+        flex-direction: column;
+    }
+
+    .editor-pane,
+    .preview-pane {
+        min-width: 100%;
+        height: 50vh !important;
+        flex-basis: auto !important;
+        border-left: none;
+        margin-bottom: 0;
+    }
+
+    .preview-pane {
+        border-top: 1px solid var(--border-color);
+    }
+
+    .gutter {
+        display: none;
+    }
+
+    .preview-container {
+        height: auto;
+        flex-grow: 1;
+    }
+
+    /* INITIAL STATE */
+    .app-container.initial-state {
+        padding-top: 3vh;
+        padding-bottom: 5vh;
+    }
+
+    /* --- Adjust initial logo size for smaller screens --- */
+    .app-container.initial-state .initial-content .logo h1 {
+        font-size: 2em;
+    }
+
+    .app-container.initial-state .initial-content .initial-description {
+        font-size: 1em; /* Readjust description size */
+    }
+
+    .app-container.initial-state .initial-layout-wrapper {
+        max-width: 95%;
+    }
+
+    .app-container.initial-state .input-area {
+        width: 100%; /* Full width on mobile */
+        padding: 12px 15px;
+        box-shadow: 0 4px 15px -5px rgba(0, 0, 0, 0.1); /* Less intense shadow */
+    }
+
+    .app-container.initial-state .footer-note-bottom {
+        font-size: 0.7em;
+        bottom: 10px;
+        padding: 5px;
+    }
+
+    .footer-note-bottom .footer-separator {
+        display: inline-block;
+    }
+
+    .footer-note-bottom .footer-links {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* DEFAULT/ACTIVE STATE */
+    .app-header .logo h1 {
+        font-size: 1em;
+    }
+
+    .app-header .header-links .icon-button i {
+        font-size: 1em;
+    }
+
+    .input-controls-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .config-group.add-models-button-container {
+        align-self: flex-end;
+        margin-top: 4px;
+        margin-left: 0;
+    }
+
+    .icon-button.add-models-button {
+        width: 30px;
+        height: 30px;
+    }
+
+    .prompt-input-container {
+        padding-right: 4px;
+        padding-left: 8px;
+    }
+
+    textarea#prompt-input {
+        font-size: 0.85em;
+    }
+
+    .submit-button {
+        width: 28px;
+        height: 28px;
+    }
+
+    .submit-button i {
+        font-size: 0.8em;
+    }
+
+    /* INITIAL STATE */
+     /* --- Adjust initial logo size for smallest screens --- */
+    .app-container.initial-state .initial-content .logo h1 {
+        font-size: 1.8em;
+        gap: 8px;
+    }
+
+    .app-container.initial-state .initial-content .initial-description {
+        font-size: 0.9em; /* Readjust description size */
+    }
+
+    .app-container.initial-state .initial-layout-wrapper {
+        max-width: 95%;
+    }
+
+    .app-container.initial-state .input-area {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px; /* Slightly smaller radius */
+    }
+
+    .app-container.initial-state .generation-config.input-controls-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .app-container.initial-state .config-group.add-models-button-container {
+        align-self: flex-end;
+        margin-top: 4px;
+    }
+
+    .app-container.initial-state .footer-note-bottom {
+        bottom: 8px;
+        padding: 5px;
+    }
+
+    .footer-note-bottom .footer-separator {
+        display: none;
+    }
+
+    .footer-note-bottom .footer-links {
+        margin-left: 8px;
+    }
+}

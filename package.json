@@ -1,0 +1,18 @@
+{
+    "name": "gemini-weaver",
+    "version": "1.0.0",
+    "description": "Website generator using simulated Gemini API",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "@google/generative-ai": "^0.24.0",
+        "dotenv": "^16.4.7",
+        "express": "^4.18.2",
+        "jszip": "^3.10.1",
+        "openai": "^4.91.1"
+    },
+    "author": "",
+    "license": "ISC"
+}
