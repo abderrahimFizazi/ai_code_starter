@@ -19,8 +19,7 @@ Generate starter web code (HTML/CSS/JS) from natural language prompts using vari
 ---
 
 ## Frontend Live Demo
-
-
+https://abderrahimfizazi.github.io/ai_code_starter/public/
 ---
 
 ## How it Works (High Level)
@@ -56,10 +55,6 @@ To run this project locally:
     *   **Important:** Never commit your `.env` file to version control! Add `.env` to your `.gitignore` file.
 
 4.  **Run the application:**
-    *   Start the backend server (from the backend directory):
-        ```bash
-        npm start
-        ```
     *   Start the application:
         ```bash
         node server.js
